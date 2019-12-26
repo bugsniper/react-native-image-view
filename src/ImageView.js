@@ -72,6 +72,7 @@ type PropsType = {
     onClose: () => {},
     onImageChange: number => {},
     renderFooter: ImageType => {},
+    renderHeader: ImageType => {},
     controls: {
         close?: ComponentType<ControlType> | boolean,
         next?: ComponentType<ControlType> | boolean,
@@ -457,9 +458,9 @@ export default class ImageView extends Component<PropsType, StateType> {
             [
                 modalBackgroundOpacity > 0
                     ? Animated.timing(this.modalBackgroundOpacity, {
-                          toValue: 0,
-                          duration: 100,
-                      })
+                        toValue: 0,
+                        duration: 100,
+                    })
                     : null,
                 Animated.timing(this.imageTranslateValue.x, {
                     toValue: x,
@@ -751,7 +752,7 @@ export default class ImageView extends Component<PropsType, StateType> {
     };
 
     render(): Node {
-        const {animationType, renderFooter, backgroundColor} = this.props;
+        const {animationType, renderFooter, renderHeader, backgroundColor} = this.props;
         const {
             images,
             imageIndex,
@@ -795,6 +796,18 @@ export default class ImageView extends Component<PropsType, StateType> {
                         styles.underlay,
                     ]}
                 />
+                {renderHeader && (
+                    <Animated.View
+                        style={[styles.header, {transform: headerTranslate}]}
+                        onLayout={event => {
+                            this.footerHeight = event.nativeEvent.layout.height;
+                        }}
+                    >
+                        {typeof renderHeader === 'function' &&
+                        images[imageIndex] &&
+                        renderHeader(images[imageIndex])}
+                    </Animated.View>
+                )}
                 <Animated.View
                     style={[
                         styles.header,
@@ -805,7 +818,7 @@ export default class ImageView extends Component<PropsType, StateType> {
                 >
                     <SafeAreaView style={{flex: 1}}>
                         {!!close &&
-                            React.createElement(close, {onPress: this.close})}
+                        React.createElement(close, {onPress: this.close})}
                     </SafeAreaView>
                 </Animated.View>
                 <FlatList
@@ -825,11 +838,11 @@ export default class ImageView extends Component<PropsType, StateType> {
                     onMomentumScrollEnd={this.onMomentumScrollEnd}
                 />
                 {prev &&
-                    isPrevVisible &&
-                    React.createElement(prev, {onPress: this.scrollToPrev})}
+                isPrevVisible &&
+                React.createElement(prev, {onPress: this.scrollToPrev})}
                 {next &&
-                    isNextVisible &&
-                    React.createElement(next, {onPress: this.scrollToNext})}
+                isNextVisible &&
+                React.createElement(next, {onPress: this.scrollToNext})}
                 {renderFooter && (
                     <Animated.View
                         style={[styles.footer, {transform: footerTranslate}]}
@@ -838,8 +851,8 @@ export default class ImageView extends Component<PropsType, StateType> {
                         }}
                     >
                         {typeof renderFooter === 'function' &&
-                            images[imageIndex] &&
-                            renderFooter(images[imageIndex])}
+                        images[imageIndex] &&
+                        renderFooter(images[imageIndex])}
                     </Animated.View>
                 )}
             </Modal>
