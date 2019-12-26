@@ -12,13 +12,13 @@ Try with expo: https://expo.io/@antonkalinin/react-native-image-view
 ## Installation
 
 ```bash
-yarn add react-native-image-view
+yarn add https://github.com/bugsniper/react-native-image-view.git --save
 ```
 
 or
 
 ```bash
-npm install --save react-native-image-view
+npm install --save https://github.com/bugsniper/react-native-image-view.git
 ```
 
 ## Demo
